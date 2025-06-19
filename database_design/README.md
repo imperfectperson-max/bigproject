@@ -5,7 +5,7 @@ Scope: This diagram models the core data structure for the National Biomedical R
 Key Entities
 Institution
 
-Attributes: ID, Name, Type (Academic/Corporate/Government), AccreditationStatus, BSLLevel
+Attributes: ID, Name, Type (Academic/Corporate/Government), TaxStatus
 
 Relationships:
 
