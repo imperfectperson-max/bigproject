@@ -52,3 +52,8 @@ Dynamic Tableau/PowerBI dashboards
 Streamlit app for real-time monitoring
 
 Automated PDF report generation
+
+# Project Timeline
+16 - 18 June 2025 = Created custom client problems into one big project and broke down the problem into manageable pieces to approach over like a year.
+
+19 June 2025 - Created EERD Diagram and used help from Deepseek to describe the diagram in the database_design/README.md file
