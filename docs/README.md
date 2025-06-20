@@ -54,6 +54,8 @@ Streamlit app for real-time monitoring
 Automated PDF report generation
 
 # Project Timeline
-16 - 18 June 2025 = Created custom client problems into one big project and broke down the problem into manageable pieces to approach over like a year.
+16 - 18 June 2025 = Created custom client problems into one big project and broke down the problem into manageable pieces to approach over a year.
 
 19 June 2025 - Created EERD Diagram and used help from Deepseek to describe the diagram in the database_design/README.md file
+
+20 June 2025 - Created SQL table schema and inserts, but I couldn't finish. I have problems inserting records inside the Researcher table, which I will fix. 
