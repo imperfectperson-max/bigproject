@@ -58,4 +58,5 @@ Automated PDF report generation
 
 19 June 2025 - Created EERD Diagram and used help from Deepseek to describe the diagram in the database_design/README.md file
 
-20 June 2025 - Created SQL table schema and inserts, but I couldn't finish. I have problems inserting records inside the Researcher table, which I will fix. 
+20 June 2025 - Created SQL table schema and inserts, but I couldn't finish. I have problems inserting records inside the Researcher table, which I will fix. The problem now is fixed the last 2 record inserted
+The researcher did not ensure data integrity.
