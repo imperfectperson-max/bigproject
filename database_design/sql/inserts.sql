@@ -64,9 +64,7 @@ INSERT INTO Researcher (NIHHISID, ORCID, VisaStatus, SecurityClearance, COIDiscl
 
 -- Government researchers
 ('NC111111', '0000-0009-8901-2345', 'J1', 'Top Secret', 'None', 3),
-('NC222222', '0000-0009-9012-3456', 'US Citizen', 'Top Secret', 'None', 3),
-('CD333333', '0000-0010-0123-4567', 'US Citizen', 'Secret', 'None', 8),
-('CD444444', '0000-0010-1234-5678', 'US Citizen', 'Secret', 'Advisory role', 8);
+('NC222222', '0000-0009-9012-3456', 'US Citizen', 'Top Secret', 'None', 3);
 
 -- 7. Employment History with temporal patterns
 INSERT INTO EmploymentHistory (StartDate, EndDate, FTEPercentage, Department, ResearcherID) VALUES
