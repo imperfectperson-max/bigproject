@@ -61,4 +61,6 @@ Automated PDF report generation
 20 June 2025 - Created SQL table schema and inserts, but I couldn't finish. I have problems inserting records inside the Researcher table, which I will fix. The problem now is that the last 2 records inserted
 The researcher did not ensure data integrity.
 
-21 June 2025 - Edited the EERD Diagram to make the relationships to make more sense, around the Instiution table.
+21 June 2025 — Edited the EERD Diagram to make the relationships around the Institution table more meaningful.
+
+23 June 2025 - Added the answer to the first SQL query problem 
