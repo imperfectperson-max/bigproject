@@ -64,3 +64,5 @@ The researcher did not ensure data integrity.
 21 June 2025 — Edited the EERD Diagram to make the relationships around the Institution table more meaningful.
 
 23 June 2025 - Added the answer to the first SQL query problem 
+
+25 June 2025 - Added Jupyter (Python code) notebook to connect to a SQL Server / Microsoft Azure Database to anoymize participants - will later could not connect to the database
