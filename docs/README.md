@@ -58,11 +58,13 @@ Automated PDF report generation
 
 19 June 2025 - Created EERD Diagram and used help from Deepseek to describe the diagram in the database_design/README.md file
 
-20 June 2025 - Created SQL table schema and inserts, but I couldn't finish. I have problems inserting records inside the Researcher table, which I will fix. The problem now is that the last 2 records inserted
+20 June 2025 - Created SQL table schema and inserts, but I couldn't finish. I have issues inserting records into the Researcher table, which I will resolve. The problem now is that the last 2 records inserted
 The researcher did not ensure data integrity.
 
 21 June 2025 — Edited the EERD Diagram to make the relationships around the Institution table more meaningful.
 
 23 June 2025 - Added the answer to the first SQL query problem 
 
-25 June 2025 - Added Jupyter (Python code) notebook to connect to a SQL Server / Microsoft Azure Database to anoymize participants - will later could not connect to the database
+25 June 2025 - Added Jupyter (Python code) notebook to connect to a SQL Server / Microsoft Azure Database to anonymize participants - will later be unable to connect to the database
+
+26 June 2025 - Added missing columns to Project and EmploymentHistory, also the second query from the problem statement.
