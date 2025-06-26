@@ -226,3 +226,26 @@ CREATE TABLE Regulatory (
     CONSTRAINT FK_Regulatory_Institution FOREIGN KEY (InstitutionID) REFERENCES Institution(InstitutionID) -- Changed to reference Institution
 );
 GO
+--Add columns that are missing in Project and EmploymentHistory
+BEGIN TRANSACTION;
+
+-- Add PrincipalInvestigatorID column with foreign key constraint
+ALTER TABLE Project
+ADD PrincipalInvestigatorID INT NULL;
+
+ALTER TABLE Project
+ADD CONSTRAINT FK_Project_Researcher 
+    FOREIGN KEY (PrincipalInvestigatorID) REFERENCES Researcher(ResearcherID);
+
+-- Add date columns
+ALTER TABLE Project
+ADD StartDate DATE NULL,
+    EndDate DATE NULL;
+GO
+
+BEGIN TRANSACTION;
+
+-- Add InstitutionID column
+ALTER TABLE EmploymentHistory
+ADD InstitutionID INT NULL;
+GO
