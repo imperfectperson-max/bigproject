@@ -128,7 +128,18 @@ CREATE TABLE Publication (
     CONSTRAINT CHK_EmbargoFuture CHECK (EmbargoPeriod > GETDATE())
 );
 GO
-
+    
+-- Temperature violation tracking
+CREATE TABLE TemperatureViolations (
+    FreezerID INT NOT NULL,
+    Location VARCHAR(255),
+    MaxViolationTemp DECIMAL(5,2),  -- Highest temperature reading ≥ -70°C
+    FirstViolation DATETIME2,       -- Earliest violation in the 7-day window
+    LastViolation DATETIME2,        -- Most recent violation in the 7-day window
+    PRIMARY KEY (FreezerID)
+);
+GO
+    
 -- Biological specimen tracking
 CREATE TABLE Biospecimen (
     RepositoryID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
@@ -136,7 +147,9 @@ CREATE TABLE Biospecimen (
     FreezerLocation VARCHAR(255) NOT NULL,
     ChainOfCustodyLogs VARCHAR(MAX) NOT NULL, -- Changed to text for detailed logs
     InstitutionID INT NOT NULL,
-    CONSTRAINT FK_Biospecimen_Institution FOREIGN KEY (InstitutionID) REFERENCES Institution(InstitutionID) -- Changed to reference Institution
+    FreezerID INT NOT NULL,
+    CONSTRAINT FK_Biospecimen_Institution FOREIGN KEY (InstitutionID) REFERENCES Institution(InstitutionID), -- Changed to reference Institution
+    CONSTRAINT FK_Temperature_Violations FOREIGN KEY (FreezerID) REFERENCES TemperatureViolations(FreezerID)
 );
 GO
 
@@ -226,6 +239,7 @@ CREATE TABLE Regulatory (
     CONSTRAINT FK_Regulatory_Institution FOREIGN KEY (InstitutionID) REFERENCES Institution(InstitutionID) -- Changed to reference Institution
 );
 GO
+
 --Add columns that are missing in Project and EmploymentHistory
 BEGIN TRANSACTION;
 
