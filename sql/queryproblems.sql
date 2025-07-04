@@ -142,9 +142,6 @@ Skills Tested:
 • Hierarchical joins (Institution → Department → Researcher → Trial)
 */
 
-BEGIN TRANSACTION;
-
-
 SELECT 
     I.LegalName AS Institution,
     I.Type AS InstitutionType,
