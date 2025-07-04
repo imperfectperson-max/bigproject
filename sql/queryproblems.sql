@@ -129,3 +129,64 @@ GROUP BY
     CR.InstitutionCount, AP.ActiveProjectCount
 ORDER BY 
     ActiveProjectCount DESC, TotalFTE DESC;
+
+/**
+3. Compliance Monitoring 
+Problem: 
+*"Generate a report of all clinical trials missing IRB renewal dates within the next 30 days, 
+flagged by institution type and PI contact info. Include trials with past-due renewals in 
+red."* 
+Skills Tested: 
+• Date arithmetic (CURRENT_DATE + INTERVAL '30 days') 
+• Conditional formatting (use CASE WHEN) 
+• Hierarchical joins (Institution → Department → Researcher → Trial)
+*/
+
+BEGIN TRANSACTION;
+
+
+SELECT 
+    I.LegalName AS Institution,
+    I.Type AS InstitutionType,
+    R.FirstName + ' ' + R.LastName AS PrincipalInvestigator,
+    R.Email AS PI_Contact,
+    P.ProtocolID,
+    P.ProjectTitle,
+    R.IRBRenewalDate,
+    CASE 
+        WHEN R.IRBRenewalDate < GETDATE() THEN 'PAST DUE'
+        WHEN R.IRBRenewalDate <= DATEADD(day, 30, GETDATE()) THEN 'DUE WITHIN 30 DAYS'
+        ELSE 'UP TO DATE'
+    END AS RenewalStatus,
+    CASE 
+        WHEN R.IRBRenewalDate < GETDATE() THEN '🔴 RED'
+        WHEN R.IRBRenewalDate <= DATEADD(day, 30, GETDATE()) THEN '🟡 YELLOW'
+        ELSE '🟢 GREEN'
+    END AS StatusColor
+FROM 
+    Project P
+JOIN 
+    Researcher R ON P.PrincipalInvestigatorID = R.ResearcherID
+JOIN 
+    Institution I ON R.InstitutionID = I.InstitutionID
+WHERE 
+    R.IRBRenewalDate IS NULL 
+    OR R.IRBRenewalDate <= DATEADD(day, 30, GETDATE())
+ORDER BY 
+    CASE 
+        WHEN R.IRBRenewalDate < GETDATE() THEN 0
+        WHEN R.IRBRenewalDate <= DATEADD(day, 30, GETDATE()) THEN 1
+        ELSE 2
+    END,
+    R.IRBRenewalDate;
+
+/**
+4. Biospecimen Chain-of-Custody 
+Problem: 
+*"Find all biospecimen aliquots stored in freezers at locations with temperature violations 
+(≥ -70°C) in the last week, tracing back to the originating trial and PI."* 
+Skills Tested: 
+• Time-series filtering 
+• Multi-hop joins (Freezer → Biospecimen → Trial → Researcher) 
+• Threshold validation
+*/
