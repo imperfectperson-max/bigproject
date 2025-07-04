@@ -54,3 +54,5 @@ The researcher did not ensure data integrity.
 25 June 2025 - Added Jupyter (Python code) notebook to connect to a SQL Server / Microsoft Azure Database to anonymize participants - will later be unable to connect to the database
 
 26 June 2025 - Added missing columns to Project and EmploymentHistory, also the second query from the problem statement.
+
+04 July 2025 - Added the  Compliance Monitoring SQL query using date arithmetic
