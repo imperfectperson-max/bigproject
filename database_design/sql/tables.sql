@@ -230,21 +230,24 @@ GO
 BEGIN TRANSACTION;
 
 -- Add PrincipalInvestigatorID column with foreign key constraint
-ALTER TABLE Project
-ADD PrincipalInvestigatorID INT NULL;
-
-ALTER TABLE Project
-ADD CONSTRAINT FK_Project_Researcher 
-    FOREIGN KEY (PrincipalInvestigatorID) REFERENCES Researcher(ResearcherID);
-
 -- Add date columns
+BEGIN TRANSACTION;
 ALTER TABLE Project
 ADD StartDate DATE NULL,
-    EndDate DATE NULL;
+    EndDate DATE NULL.
+    ProjectTitle VARCHAR(100) NULL,
+    PrincipalInvestigatorID INT NUL;
 GO
+    
+BEGIN TRANSACTION;
+ALTER TABLE Researcher
+ADD IRBRenewalDate DATE NULL,
+    FirstName VARCHAR(80) NULL, 
+    LastName VARCHAR(80) NULL,
+    Email VARCHAR(255) NULL;
+GO;
 
 BEGIN TRANSACTION;
-
 -- Add InstitutionID column
 ALTER TABLE EmploymentHistory
 ADD InstitutionID INT NULL;
