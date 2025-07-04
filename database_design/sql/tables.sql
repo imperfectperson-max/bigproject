@@ -131,12 +131,25 @@ GO
     
 -- Temperature violation tracking
 CREATE TABLE TemperatureViolations (
-    FreezerID INT NOT NULL,
+    FreezerID INT IDENTITY(1,1) PRIMARY KEY,
     Location VARCHAR(255),
     MaxViolationTemp DECIMAL(5,2),  -- Highest temperature reading ≥ -70°C
     FirstViolation DATETIME2,       -- Earliest violation in the 7-day window
-    LastViolation DATETIME2,        -- Most recent violation in the 7-day window
-    PRIMARY KEY (FreezerID)
+    LastViolation DATETIME2       -- Most recent violation in the 7-day window
+);
+GO
+
+CREATE TABLE TemperatureLog (
+    LogID INT IDENTITY(1,1) PRIMARY KEY,
+    FreezerID INT NOT NULL,
+    ReadingValue DECIMAL(5,2) NOT NULL,  -- Stores -99.99 to 99.99
+    ReadingTime DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
+    SensorID VARCHAR(50) NOT NULL,       -- Physical sensor identifier
+    IsManualEntry BIT DEFAULT 0,         -- 0=automatic, 1=manual entry
+    RecordedBy VARCHAR(50) NULL,         -- For manual entries
+    CONSTRAINT FK_TemperatureLog_Freezer FOREIGN KEY (FreezerID) REFERENCES Freezer(FreezerID),
+    CONSTRAINT CHK_ValidTemperatureRange CHECK (ReadingValue BETWEEN -100 AND 100),
+    CONSTRAINT CHK_ReadingTime CHECK (ReadingTime <= DATEADD(minute, 5, SYSUTCDATETIME()))
 );
 GO
     
