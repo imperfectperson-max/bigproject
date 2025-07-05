@@ -129,6 +129,48 @@ CREATE TABLE Publication (
 );
 GO
     
+CREATE TABLE Freezer (
+    FreezerID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+    FreezerName VARCHAR(50) NOT NULL,
+    LocationID INT NOT NULL,
+    Manufacturer VARCHAR(50),
+    ModelNumber VARCHAR(30),
+    SerialNumber VARCHAR(30) UNIQUE,
+    TemperatureRangeLow DECIMAL(5,2) NOT NULL CHECK (TemperatureRangeLow <= -20),  -- e.g., -80°C
+    TemperatureRangeHigh DECIMAL(5,2) NOT NULL CHECK (TemperatureRangeHigh >= -196), -- e.g., -20°C
+    Capacity INT,  -- Total capacity in aliquots
+    CurrentUtilization INT CHECK (CurrentUtilization <= Capacity),
+    BSLLevel INT NOT NULL CHECK (BSLLevel BETWEEN 1 AND 4),
+    LastCalibrationDate DATE,
+    NextCalibrationDate DATE,
+    MaintenanceSchedule VARCHAR(20) CHECK (MaintenanceSchedule IN ('Weekly', 'Monthly', 'Quarterly')),
+    Status VARCHAR(20) DEFAULT 'Active' CHECK (Status IN ('Active', 'Maintenance', 'Decommissioned')),
+    CONSTRAINT FK_Freezer_Location FOREIGN KEY (LocationID) REFERENCES Location(LocationID),
+    CONSTRAINT CHK_CalibrationDates CHECK (NextCalibrationDate > LastCalibrationDate)
+);
+
+-- Temperature monitoring log table
+CREATE TABLE TemperatureLog (
+    LogID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+    FreezerID INT NOT NULL,
+    ReadingValue DECIMAL(5,2) NOT NULL,  -- Temperature in °C
+    ReadingTime DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    SensorID VARCHAR(30) NOT NULL,
+    IsManualEntry BIT DEFAULT 0,
+    RecordedBy INT,  -- ResearcherID who manually recorded
+    CONSTRAINT FK_TemperatureLog_Freezer FOREIGN KEY (FreezerID) REFERENCES Freezer(FreezerID),
+    CONSTRAINT FK_TemperatureLog_Researcher FOREIGN KEY (RecordedBy) REFERENCES Researcher(ResearcherID)
+);
+
+-- Freezer compartment/shelf structure
+CREATE TABLE FreezerCompartment (
+    CompartmentID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+    FreezerID INT NOT NULL,
+    CompartmentName VARCHAR(20) NOT NULL,  -- e.g., "Shelf A", "Drawer 3"
+    TemperatureZone VARCHAR(20),
+    CONSTRAINT FK_Compartment_Freezer FOREIGN KEY (FreezerID) REFERENCES Freezer(FreezerID),
+    CONSTRAINT UQ_FreezerCompartment UNIQUE (FreezerID, CompartmentName)
+);
 -- Temperature violation tracking
 CREATE TABLE TemperatureViolations (
     FreezerID INT IDENTITY(1,1) PRIMARY KEY,
@@ -136,23 +178,10 @@ CREATE TABLE TemperatureViolations (
     MaxViolationTemp DECIMAL(5,2),  -- Highest temperature reading ≥ -70°C
     FirstViolation DATETIME2,       -- Earliest violation in the 7-day window
     LastViolation DATETIME2       -- Most recent violation in the 7-day window
+    CONSTRAINT FK_CFreezer FOREIGN KEY (FreezerID) REFERENCES Freezer(FreezerID)
 );
 GO
 
-CREATE TABLE TemperatureLog (
-    LogID INT IDENTITY(1,1) PRIMARY KEY,
-    FreezerID INT NOT NULL,
-    ReadingValue DECIMAL(5,2) NOT NULL,  -- Stores -99.99 to 99.99
-    ReadingTime DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
-    SensorID VARCHAR(50) NOT NULL,       -- Physical sensor identifier
-    IsManualEntry BIT DEFAULT 0,         -- 0=automatic, 1=manual entry
-    RecordedBy VARCHAR(50) NULL,         -- For manual entries
-    CONSTRAINT FK_TemperatureLog_Freezer FOREIGN KEY (FreezerID) REFERENCES Freezer(FreezerID),
-    CONSTRAINT CHK_ValidTemperatureRange CHECK (ReadingValue BETWEEN -100 AND 100),
-    CONSTRAINT CHK_ReadingTime CHECK (ReadingTime <= DATEADD(minute, 5, SYSUTCDATETIME()))
-);
-GO
-    
 -- Biological specimen tracking
 CREATE TABLE Biospecimen (
     RepositoryID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
