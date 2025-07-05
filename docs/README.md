@@ -56,3 +56,5 @@ The researcher did not ensure data integrity.
 26 June 2025 - Added missing columns to Project and EmploymentHistory, also the second query from the problem statement.
 
 04 July 2025 - Added the  Compliance Monitoring SQL query using date arithmetic
+
+05 July 2025 - Added freezer tables to the schema to accomodate the 4th query
