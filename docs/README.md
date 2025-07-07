@@ -53,8 +53,10 @@ The researcher did not ensure data integrity.
 
 25 June 2025 - Added Jupyter (Python code) notebook to connect to a SQL Server / Microsoft Azure Database to anonymize participants - will later be unable to connect to the database
 
-26 June 2025 - Added missing columns to Project and EmploymentHistory, also the second query from the problem statement.
+26 June 2025 - Added missing columns to Project and EmploymentHistory, as well as the second query from the problem statement.
 
 04 July 2025 - Added the  Compliance Monitoring SQL query using date arithmetic
 
-05 July 2025 - Added freezer tables to the schema to accomodate the 4th query
+05 July 2025 - Added freezer tables to the schema to accommodate the 4th query
+
+07 July 2025 - Added Biospecimen Chain-of-Custody query 
