@@ -187,3 +187,56 @@ Skills Tested:
 • Multi-hop joins (Freezer → Biospecimen → Trial → Researcher) 
 • Threshold validation
 */
+WITH TemperatureViolations AS (
+    -- Get freezers with recent temperature violations
+    SELECT 
+        F.FreezerID,
+        F.Location,
+        MAX(T.ReadingValue) AS MaxViolationTemp,
+        MIN(T.ReadingTime) AS FirstViolation,
+        MAX(T.ReadingTime) AS LastViolation
+    FROM 
+        Freezer F
+    JOIN 
+        TemperatureLog T ON F.FreezerID = T.FreezerID
+    WHERE 
+        T.ReadingValue >= -70  -- Temperature violation threshold
+        AND T.ReadingTime >= DATEADD(day, -7, GETDATE())  -- Last 7 days
+    GROUP BY 
+        F.FreezerID, F.Location
+    HAVING 
+        COUNT(*) > 3  -- Require multiple violations to filter out spikes
+)
+
+SELECT 
+    B.RepositoryID,
+    B.AliquotID,
+    B.AliquotCount,
+    F.Location AS FreezerLocation,
+    TV.MaxViolationTemp,
+    TV.FirstViolation,
+    TV.LastViolation,
+    P.ProtocolID,
+    P.ProjectTitle,
+    CONCAT(R.FirstName, ' ', R.LastName) AS PrincipalInvestigator,
+    R.Email AS PI_Contact,
+    R.Phone AS PI_Phone,
+    I.LegalName AS Institution,
+    CASE 
+        WHEN TV.MaxViolationTemp >= -60 THEN 'CRITICAL'
+        WHEN TV.MaxViolationTemp >= -70 THEN 'WARNING'
+    END AS SeverityLevel
+FROM 
+    Biospecimen B
+JOIN 
+    TemperatureViolations TV ON B.FreezerID = TV.FreezerID
+JOIN 
+    Project P ON B.ProjectID = P.ProtocolID
+JOIN 
+    Researcher R ON P.PrincipalInvestigatorID = R.ResearcherID
+JOIN 
+    Institution I ON R.InstitutionID = I.InstitutionID
+ORDER BY 
+    SeverityLevel DESC,
+    TV.MaxViolationTemp DESC,
+    TV.LastViolation DESC;
