@@ -1,0 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+*.csv
+*.xlsx
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Database
+*.db
+*.sqlite
+*.mdf
+*.ldf
+*.bak
+
+# Secrets and config
+.env
+.env.local
+secrets.json
+config.local.json
+*_SALT*
+
+# Temporary files
+/tmp/
+*.tmp
+*.log
+
+# Test outputs
+test_*.csv
+*_anonymized.csv
+sample_*.csv
