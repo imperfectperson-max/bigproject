@@ -225,7 +225,8 @@ WHERE
     )
 ORDER BY 
     PriorityLevel,
-    ISNULL(R.IRBRenewalDate, REG.IRBExpirationDate);
+    COALESCE(R.IRBRenewalDate, REG.IRBExpirationDate, '9999-12-31'),  -- NULL dates sort last
+    PR.ProtocolID;
 
 /**
 4. Biospecimen Chain-of-Custody 

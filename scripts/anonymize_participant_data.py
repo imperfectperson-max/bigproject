@@ -122,7 +122,9 @@ class ParticipantAnonymizer:
             try:
                 consent_date = datetime.fromisoformat(str(participant['ConsentDate']))
                 consent_year = consent_date.year
-            except (ValueError, TypeError):
+            except (ValueError, TypeError) as e:
+                # ConsentDate must be in ISO format (YYYY-MM-DD)
+                # If conversion fails, leave as None
                 consent_year = None
 
         # Build anonymized record

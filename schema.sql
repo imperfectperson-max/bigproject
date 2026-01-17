@@ -100,8 +100,8 @@ CREATE TABLE Researcher (
     Email VARCHAR(255) NOT NULL,
     NIHHISID CHAR(10) NOT NULL,
     ORCID CHAR(19) NOT NULL CHECK (
-        ORCID LIKE '0000-000[1-9]-[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' OR
-        ORCID LIKE '0000-000[1-9]-[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]X'
+        ORCID LIKE '0000-[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' OR
+        ORCID LIKE '0000-[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9]X'
     ),
     VisaStatus VARCHAR(30) NOT NULL,
     SecurityClearance VARCHAR(30) NOT NULL,

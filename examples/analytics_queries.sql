@@ -163,8 +163,19 @@ WHERE
     AND CAST(F2.CurrentUtilization AS FLOAT) / F2.Capacity < 0.80
     AND L1.GPSLatitude IS NOT NULL
     AND L2.GPSLatitude IS NOT NULL
-    AND 3959 * ACOS(
-        COS(RADIANS(L1.GPSLatitude)) * COS(RADIANS(L2.GPSLatitude)) *
-        COS(RADIANS(L2.GPSLongitude) - RADIANS(L1.GPSLongitude)) +
-        SIN(RADIANS(L1.GPSLatitude)) * SIN(RADIANS(L2.GPSLatitude))
+    -- Distance calculation with floating point safety
+    AND (
+        SELECT 3959 * ACOS(
+            CASE 
+                WHEN COS(RADIANS(L1.GPSLatitude)) * COS(RADIANS(L2.GPSLatitude)) *
+                     COS(RADIANS(L2.GPSLongitude) - RADIANS(L1.GPSLongitude)) +
+                     SIN(RADIANS(L1.GPSLatitude)) * SIN(RADIANS(L2.GPSLatitude)) > 1 THEN 1
+                WHEN COS(RADIANS(L1.GPSLatitude)) * COS(RADIANS(L2.GPSLatitude)) *
+                     COS(RADIANS(L2.GPSLongitude) - RADIANS(L1.GPSLongitude)) +
+                     SIN(RADIANS(L1.GPSLatitude)) * SIN(RADIANS(L2.GPSLatitude)) < -1 THEN -1
+                ELSE COS(RADIANS(L1.GPSLatitude)) * COS(RADIANS(L2.GPSLatitude)) *
+                     COS(RADIANS(L2.GPSLongitude) - RADIANS(L1.GPSLongitude)) +
+                     SIN(RADIANS(L1.GPSLatitude)) * SIN(RADIANS(L2.GPSLatitude))
+            END
+        )
     ) <= 50;
