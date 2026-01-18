@@ -1,5 +1,6 @@
 # National Biomedical Research Network (NBRN) Database System
 
+[![CI](https://github.com/imperfectperson-max/bigproject/actions/workflows/ci.yml/badge.svg)](https://github.com/imperfectperson-max/bigproject/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![SQL Server](https://img.shields.io/badge/SQL%20Server-2019%2B-red.svg)](https://www.microsoft.com/sql-server)
 [![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/)
@@ -17,6 +18,10 @@ This repository contains the **complete implementation** of the National Biomedi
 - ✅ Support for 10M+ adverse event records per year
 - ✅ Chain-of-custody tracking for biospecimens
 - ✅ Multi-jurisdictional compliance (ITAR, EAR, GDPR, HIPAA)
+
+## Continuous Integration
+
+This repository includes automated CI workflows that validate code quality and run tests across multiple language environments. The CI system automatically detects project languages and runs appropriate validations. [View workflow runs →](https://github.com/imperfectperson-max/bigproject/actions/workflows/ci.yml)
 
 ## Quick Start
 
