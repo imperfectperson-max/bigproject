@@ -1,0 +1,53 @@
+name: CI - Python and SQL Validation
+
+on: [push, pull_request]
+
+jobs:
+  validate:
+    name: Validate Python and SQL
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 sqlfluff
+      
+      - name: Lint Python scripts with flake8
+        run: |
+          flake8 scripts/ --max-line-length=100
+      
+      - name: Run anonymization script (sample mode)
+        env:
+          ANONYMIZATION_SALT: "test-salt-for-ci-demo-minimum-32-characters-long-12345"
+        run: |
+          python scripts/anonymize_participant_data.py -o anonymized_demo.csv --sample --verbose
+      
+      - name: Upload anonymized demo output
+        uses: actions/upload-artifact@v4
+        with:
+          name: anonymized-demo-output
+          path: anonymized_demo.csv
+          retention-days: 30
+      
+      - name: Lint SQL files with sqlfluff
+        run: |
+          sqlfluff lint --dialect tsql schema.sql
+          sqlfluff lint --dialect tsql sql/queryproblems.sql
+          sqlfluff lint --dialect tsql examples/analytics_queries.sql
+          sqlfluff lint --dialect tsql database_design/sql/inserts.sql
+      
+      - name: Validate SQL files are parseable
+        run: |
+          sqlfluff parse --dialect tsql schema.sql
+          sqlfluff parse --dialect tsql sql/queryproblems.sql
+          sqlfluff parse --dialect tsql examples/analytics_queries.sql
+          sqlfluff parse --dialect tsql database_design/sql/inserts.sql
