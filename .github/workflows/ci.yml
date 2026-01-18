@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: ['**']
 
+# Set minimal permissions for security
+permissions:
+  contents: read
+
 jobs:
   # Detection job - checks which language/tooling files are present
   detect:
