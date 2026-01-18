@@ -40,14 +40,14 @@ jobs:
       
       - name: Lint SQL files with sqlfluff
         run: |
-          sqlfluff lint --dialect tsql schema.sql
-          sqlfluff lint --dialect tsql sql/queryproblems.sql
-          sqlfluff lint --dialect tsql examples/analytics_queries.sql
-          sqlfluff lint --dialect tsql database_design/sql/inserts.sql
+          sqlfluff lint schema.sql
+          sqlfluff lint sql/queryproblems.sql
+          sqlfluff lint examples/analytics_queries.sql
+          sqlfluff lint database_design/sql/inserts.sql
       
       - name: Validate SQL files are parseable
         run: |
-          sqlfluff parse --dialect tsql schema.sql
-          sqlfluff parse --dialect tsql sql/queryproblems.sql
-          sqlfluff parse --dialect tsql examples/analytics_queries.sql
-          sqlfluff parse --dialect tsql database_design/sql/inserts.sql
+          sqlfluff parse schema.sql
+          sqlfluff parse sql/queryproblems.sql
+          sqlfluff parse examples/analytics_queries.sql
+          sqlfluff parse database_design/sql/inserts.sql
